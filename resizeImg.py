@@ -40,12 +40,13 @@ def error_quit(errorCode=1, imageName='', exit=True):
 
 
 def log_result(finished=0, total=1, done=False):
-    if done:
-        sys.stdout.write("\nAll done\n")
-    else:
-        sys.stdout.write("Processed [%.2f%%]\r" %
-                         (float(finished/total) * 100))
-    sys.stdout.flush()
+    return 
+    # if done:
+    #     sys.stdout.write("\nAll done\n")
+    # else:
+    #     sys.stdout.write("Processed [%.2f%%]\r" %
+    #                      (float(finished/total) * 100))
+    # sys.stdout.flush()
 
 
 def init_image_reduce():
@@ -111,6 +112,7 @@ class Image_reduce:
             img = Image.open(file)
             (wSize, hSize) = self.process_reduce_rule(img)
             img = img.resize((wSize, hSize), Image.ANTIALIAS)
+
             img.save(os.path.join(
                 self.destinationDirectory, os.path.basename(file)))
             return True
