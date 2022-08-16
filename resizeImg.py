@@ -1,5 +1,6 @@
 import math
 from PIL import Image
+from pathlib import Path
 import os
 import sys
 import getopt
@@ -105,7 +106,7 @@ class Image_reduce:
                 error_quit(errorCode=DIRESCTORY_OE_FILE_NOT_EXIST)
 
         if self.destinationDirectory is None:
-            self.destinationDirectory = os.path.curdir
+            self.destinationDirectory = Path.cwd()
 
     def reduce_size(self, file):
         if os.path.isfile(file):
