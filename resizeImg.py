@@ -5,9 +5,9 @@ import os
 import sys
 import getopt
 
-shortOpt = "d:s:f:w:h:p:"
+shortOpt = "d:s:f:w:h:p:o:"
 
-longOpt = ["src_directory=", "des_directory=",
+longOpt = ["src_directory=", "des_directory=", "output_filename="
            "file_name=", "width=", "height=", "percentage="]
 
 # error code
@@ -41,13 +41,13 @@ def error_quit(errorCode=1, imageName='', exit=True):
 
 
 def log_result(finished=0, total=1, done=False):
-    return 
-    # if done:
-    #     sys.stdout.write("\nAll done\n")
-    # else:
-    #     sys.stdout.write("Processed [%.2f%%]\r" %
-    #                      (float(finished/total) * 100))
-    # sys.stdout.flush()
+    # return 
+    if done:
+        sys.stdout.write("\nAll done\n")
+    else:
+        sys.stdout.write("Processed [%.2f%%]\r" %
+                         (float(finished/total) * 100))
+    sys.stdout.flush()
 
 
 def init_image_reduce():
@@ -69,6 +69,8 @@ def init_image_reduce():
             imageReduce.width = int(arg)
         elif opt in ['-h', '--height']:
             imageReduce.height = int(arg)
+        elif opt in ['-o', '--output_filename']:
+            imageReduce.outputFile = arg
         elif opt in ['-p', '--percentage']:
             imageReduce.percentage = float(arg) / 100
     return imageReduce
@@ -76,13 +78,14 @@ def init_image_reduce():
 
 class Image_reduce:
 
-    def __init__(self, sourceDirectory=None, destinationDirectory=None, fileName=None, width=0, height=0, percentage=0):
+    def __init__(self, sourceDirectory=None, destinationDirectory=None, fileName=None, width=0, height=0, percentage=0, outputFile=None):
         self.sourceDirectory = sourceDirectory
         self.destinationDirectory = destinationDirectory
         self.fileName = fileName
         self.width = width
         self.height = height
         self.percentage = percentage
+        self.outputFile = outputFile
 
     def check_valid(self):
         if self.sourceDirectory != None and self.fileName != None:
@@ -113,9 +116,9 @@ class Image_reduce:
             img = Image.open(file)
             (wSize, hSize) = self.process_reduce_rule(img)
             img = img.resize((wSize, hSize), Image.ANTIALIAS)
-
+            filename = os.path.basename(file)  if self.outputFile == None else self.outputFile
             img.save(os.path.join(
-                self.destinationDirectory, os.path.basename(file)))
+                self.destinationDirectory, filename))
             return True
         return False
 
