@@ -110,6 +110,10 @@ class Image_reduce:
 
         if self.destinationDirectory is None:
             self.destinationDirectory = Path.cwd()
+        else:
+            if not os.path.isdir(self.destinationDirectory):
+                os.mkdir(self.destinationDirectory)
+
 
     def reduce_size(self, file):
         if os.path.isfile(file):
